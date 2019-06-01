@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/demo.dart';
+import 'package:translator/translator.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 
 void main() {
@@ -24,8 +25,21 @@ TextEditingController _txt1 = TextEditingController();
 TextEditingController _txt2 = TextEditingController();
 int position = 0;
 int currentPage = 0;
-String _ans1 = "aaa";
-String _ans2 = "aaa";
+String _ans1 = "";
+String _ans2 = "";
+
+Map _language = {
+  "Chinese": "zh_CN",
+  "Danish": "da",
+  "Dutch": "nl_NL",
+  "English": "en_US",
+  "Finnish": "fi",
+  "French": "fr",
+  "German": "de",
+  "Italian": "it",
+  "Japanese": "ja",
+  "Korean": "ko",
+};
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -47,8 +61,8 @@ class _MyHomeStateState extends State<MyHomePage> {
         ),
         bottomNavigationBar: FancyBottomNavigation(
           tabs: [
-            TabData(iconData: Icons.local_activity, title: "Home"),
-            TabData(iconData: Icons.shopping_cart, title: "Basket")
+            TabData(iconData: Icons.translate, title: "Local"),
+            TabData(iconData: Icons.g_translate, title: "Other")
           ],
           onTabChangedListener: (position) {
             setState(() {
@@ -56,8 +70,11 @@ class _MyHomeStateState extends State<MyHomePage> {
             });
           },
         ),
-        floatingActionButton:
-            IconButton(icon: Icon(Icons.volume_up), onPressed: () {}),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.purple,
+          onPressed: () {},
+          child: Icon(Icons.volume_up),
+        ),
         body: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Center(
@@ -69,6 +86,8 @@ class _MyHomeStateState extends State<MyHomePage> {
   }
 
   _getPage(int page) {
+    String _toLanuage = 'hi';
+    final translator = GoogleTranslator();
     switch (page) {
       case 0:
         return Padding(
@@ -94,7 +113,9 @@ class _MyHomeStateState extends State<MyHomePage> {
                     color: Colors.purple,
                     onPressed: () {
                       setState(() {
-                        _ans1 = _txt1.text;
+                        translator
+                            .translate(_txt1.text, to: _toLanuage)
+                            .then((s) => _ans1 = s);
                       });
                     },
                     child: Text(
@@ -148,6 +169,14 @@ class _MyHomeStateState extends State<MyHomePage> {
                   ),
                 ),
                 Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: _from(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: _to(),
+                ),
+                Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: RaisedButton(
                     color: Colors.purple,
@@ -189,5 +218,51 @@ class _MyHomeStateState extends State<MyHomePage> {
           ),
         );
     }
+  }
+
+  List _items = List();
+
+  getItems() {}
+
+  Widget _from() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("From :"),
+        ),
+      ],
+    );
+  }
+
+  Widget _to() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text("To :"),
+        ),
+        DropdownButton(
+          items: [
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+            DropdownMenuItem(
+              child: Text("English"),
+            ),
+          ],
+          onChanged: null,
+          hint: Text("Select Language"),
+        )
+      ],
+    );
   }
 }
