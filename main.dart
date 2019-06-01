@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: new MyHomePage(),
       routes: <String, WidgetBuilder>{
@@ -23,6 +24,8 @@ TextEditingController _txt1 = TextEditingController();
 TextEditingController _txt2 = TextEditingController();
 int position = 0;
 int currentPage = 0;
+String _ans1 = "aaa";
+String _ans2 = "aaa";
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -33,14 +36,18 @@ class _MyHomeStateState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        cursorColor: Colors.purple,
+        primaryColor: Colors.purple,
+      ),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: new AppBar(
-          title: new Text('Text Translator'),
+        appBar: AppBar(
+          title: Text('Text Translator'),
         ),
         bottomNavigationBar: FancyBottomNavigation(
           tabs: [
-            TabData(iconData: Icons.home, title: "Home"),
-            TabData(iconData: Icons.search, title: "Search"),
+            TabData(iconData: Icons.local_activity, title: "Home"),
             TabData(iconData: Icons.shopping_cart, title: "Basket")
           ],
           onTabChangedListener: (position) {
@@ -49,6 +56,8 @@ class _MyHomeStateState extends State<MyHomePage> {
             });
           },
         ),
+        floatingActionButton:
+            IconButton(icon: Icon(Icons.volume_up), onPressed: () {}),
         body: Container(
           decoration: BoxDecoration(color: Colors.white),
           child: Center(
@@ -62,53 +71,122 @@ class _MyHomeStateState extends State<MyHomePage> {
   _getPage(int page) {
     switch (page) {
       case 0:
-        return Container(
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: _txt2,
-                decoration:
-                InputDecoration(labelText: "Text", hintText: "Enter Your text"),
-              ),
-              MaterialButton(
-                onPressed: () {},
-                child: Text("Submit"),
-              ),
-            ],
-          ),
-        );
-      case 1:
-        return Container(
-          child: Column(
-            children: <Widget>[
-              TextField(
-                controller: _txt1,
-                decoration:
-                InputDecoration(labelText: "Text", hintText: "Enter Your text"),
-              ),
-              MaterialButton(
-                onPressed: () {},
-                child: Text("Submit"),
-              ),
-            ],
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _txt1,
+                  decoration: InputDecoration(
+                    labelText: "Text",
+                    hintText: "Enter Your text",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: RaisedButton(
+                    color: Colors.purple,
+                    onPressed: () {
+                      setState(() {
+                        _ans1 = _txt1.text;
+                      });
+                    },
+                    child: Text(
+                      "Translate",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                      elevation: 8,
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(_ans1),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       default:
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text("This is the basket page"),
-            RaisedButton(
-              child: Text(
-                "Start new page",
-                style: TextStyle(color: Colors.white),
-              ),
-              color: Theme
-                  .of(context)
-                  .primaryColor,
-              onPressed: () {},
-            )
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _txt2,
+                  decoration: InputDecoration(
+                    labelText: "Text",
+                    hintText: "Enter Your text",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: RaisedButton(
+                    color: Colors.purple,
+                    onPressed: () {
+                      setState(() {
+                        _ans2 = _txt2.text;
+                      });
+                    },
+                    child: Text(
+                      "Translate",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Card(
+                      elevation: 8,
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(_ans2),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
     }
   }
